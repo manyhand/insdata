@@ -1,0 +1,267 @@
+
+CREATE TABLE NATION  ( N_NATIONKEY  INTEGER NOT NULL,
+                            N_NAME       CHAR(25) NOT NULL,
+                            N_REGIONKEY  INTEGER NOT NULL,
+                            N_COMMENT    VARCHAR(152),  
+                           prob real ,
+			  id int,
+			  domain int);
+
+CREATE TABLE REGION ( R_REGIONKEY  INTEGER NOT NULL,
+                            R_NAME       CHAR(25) NOT NULL,
+                            R_COMMENT    VARCHAR(152),  prob real ,
+			  id int,
+			  domain int);
+
+CREATE TABLE PART ( P_PARTKEY     INTEGER NOT NULL,
+                          P_NAME        VARCHAR(55) NOT NULL,
+                          P_MFGR        CHAR(25) NOT NULL,
+                          P_BRAND       CHAR(10) NOT NULL,
+                          P_TYPE        VARCHAR(25) NOT NULL,
+                          P_SIZE        INTEGER NOT NULL,
+                          P_CONTAINER   CHAR(10) NOT NULL,
+                          P_RETAILPRICE DECIMAL(15,2) NOT NULL,
+                          P_COMMENT     VARCHAR(23) NOT NULL,  
+			  prob real ,
+			  id int,
+			  domain int
+			
+				);
+
+CREATE TABLE SUPPLIER ( S_SUPPKEY     INTEGER NOT NULL,
+                             S_NAME        CHAR(25) NOT NULL,
+                             S_ADDRESS     VARCHAR(40) NOT NULL,
+                             S_NATIONKEY   INTEGER NOT NULL,
+                             S_PHONE       CHAR(15) NOT NULL,
+                             S_ACCTBAL     DECIMAL(15,2) NOT NULL,
+                             S_COMMENT     VARCHAR(101) NOT NULL,  
+			    prob real ,
+			  id int,
+			  domain int);
+
+CREATE TABLE PARTSUPP ( PS_PARTKEY     INTEGER NOT NULL,
+                             PS_SUPPKEY     INTEGER NOT NULL,
+                             PS_AVAILQTY    INTEGER NOT NULL,
+                             PS_SUPPLYCOST  DECIMAL(15,2)  NOT NULL,
+                             PS_COMMENT     VARCHAR(199) NOT NULL,  prob real  ,
+			  id int,
+			  domain int);
+
+CREATE TABLE CUSTOMER ( C_CUSTKEY     INTEGER NOT NULL,
+                             C_NAME        VARCHAR(25) NOT NULL,
+                             C_ADDRESS     VARCHAR(40) NOT NULL,
+                             C_NATIONKEY   INTEGER NOT NULL,
+                             C_PHONE       CHAR(15) NOT NULL,
+                             C_ACCTBAL     DECIMAL(15,2)   NOT NULL,
+                             C_MKTSEGMENT  CHAR(10) NOT NULL,
+                             C_COMMENT     VARCHAR(117) NOT NULL,  c_registrationdate DATE, prob real ,
+			  id int,
+			  domain int);
+
+CREATE TABLE ORDERS  ( O_ORDERKEY       INTEGER NOT NULL,
+                           O_CUSTKEY        INTEGER NOT NULL,
+                           O_ORDERSTATUS    CHAR(1) NOT NULL,
+                           O_TOTALPRICE     DECIMAL(15,2) NOT NULL,
+                           O_ORDERDATE      DATE NOT NULL,
+                           O_ORDERPRIORITY  CHAR(15) NOT NULL,  
+                           O_CLERK          CHAR(15) NOT NULL, 
+                           O_SHIPPRIORITY   INTEGER NOT NULL,
+                           O_COMMENT        VARCHAR(79) NOT NULL,  prob real ,
+			  id int,
+			  domain int);
+
+CREATE TABLE LINEITEM ( L_ORDERKEY    INTEGER NOT NULL,
+                             L_PARTKEY     INTEGER NOT NULL,
+                             L_SUPPKEY     INTEGER NOT NULL,
+                             L_LINENUMBER  INTEGER NOT NULL,
+                             L_QUANTITY    DECIMAL(15,2) NOT NULL,
+                             L_EXTENDEDPRICE  DECIMAL(15,2) NOT NULL,
+                             L_DISCOUNT    DECIMAL(15,2) NOT NULL,
+                             L_TAX         DECIMAL(15,2) NOT NULL,
+                             L_RETURNFLAG  CHAR(1) NOT NULL,
+                             L_LINESTATUS  CHAR(1) NOT NULL,
+                             L_SHIPDATE    DATE NOT NULL,
+                             L_COMMITDATE  DATE NOT NULL,
+                             L_RECEIPTDATE DATE NOT NULL,
+                             L_SHIPINSTRUCT CHAR(25) NOT NULL,
+                             L_SHIPMODE     CHAR(10) NOT NULL,
+                             L_COMMENT      VARCHAR(44) NOT NULL,  prob real ,
+			  id int,
+			  domain int);
+
+
+COPY NATION FROM 'C:\\code\\sql\\NATION.txt' delimiter ' ';
+
+COPY REGION FROM 'C:\\code\\sql\\REGION.txt' delimiter ' ';
+
+COPY PART FROM 'C:\\code\\sql\\PART.txt' delimiter ' ';
+
+COPY SUPPLIER FROM 'C:\\code\\sql\\SUPPLIER.txt' delimiter ' ';
+
+COPY PARTSUPP FROM 'C:\\code\\sql\\PARTSUPP.txt' delimiter ' ';
+
+COPY CUSTOMER FROM 'C:\\code\\sql\\CUSTOMER.txt' delimiter ' ';
+
+COPY ORDERS FROM 'C:\\code\\sql\\ORDERS.txt' delimiter ' ';
+
+COPY LINEITEM FROM 'C:\\code\\sql\\LINEITEM.txt' delimiter ' ';
+
+============================modify tables==============================================================
+
+select lineitem.L_PARTKEY as p_partkey,min(orders.O_ORDERDATE)-3 as p_producedate
+into part1
+from   lineitem,orders
+where lineitem.L_ORDERKEY =orders.O_ORDERKEY
+group by lineitem.L_PARTKEY
+order by lineitem.L_PARTKEY
+
+
+CREATE TABLE part2
+(
+  p_partkey integer NOT NULL,
+  p_name character varying(55) NOT NULL,
+  p_mfgr character(25) NOT NULL,
+  p_brand character(10) NOT NULL,
+  p_type character varying(25) NOT NULL,
+  p_size integer NOT NULL,
+  p_container character(10) NOT NULL,
+  p_retailprice numeric(15,2) NOT NULL,
+  p_comment character varying(23) NOT NULL,
+  producedate date,
+  prob real,
+  id integer,
+  domain integer
+)
+
+select * from part2;
+
+
+CREATE OR REPLACE FUNCTION insertPart() RETURNS BOOL AS $$
+DECLARE
+	PartKey1 int;
+        ProduceDate date;
+	curs1 cursor for select * from part1 order by P_PartKey;
+        curs cursor for select * from part order by P_PartKey;
+
+	PARTKEY int;
+        NAME varchar(55);
+	MFGR char(25);
+	BRAND char(10);
+	TYPE0 varchar(25);
+	SIZE int;
+	CONTAINER char(10);
+	RETAILERPRICE double precision;
+	COMMENT varchar(23);
+	prob real;
+        id integer;
+        domain integer;
+
+        cnt int;
+        curs2 cursor for select count(*) from part;
+        ntuples int;
+
+BEGIN
+        open curs1;
+        open curs;
+        open curs2;
+        cnt := 0;
+	LOOP
+		FETCH curs1 INTO PARTKEY1, ProduceDate;
+                FETCH curs INTO PARTKEY, NAME, MFGR, BRAND, TYPE0, SIZE, CONTAINER, RETAILERPRICE, COMMENT, prob, id, domain;
+
+                
+		EXIT WHEN NOT FOUND;
+                insert into PART2 values(PARTKEY, NAME, MFGR, BRAND, TYPE0, SIZE, CONTAINER, RETAILERPRICE, COMMENT, ProduceDate, prob, id, domain);
+               cnt := cnt+1;
+
+	END LOOP;
+        fetch curs2 into ntuples;
+
+	IF cnt = ntuples THEN
+		RAISE NOTICE 'SUCCESS! Insert % row(s).', (cnt);
+		return TRUE;
+	ELSE
+		RAISE NOTICE 'FAILED!!!';
+		return FALSE;
+	END IF;	
+
+	close curs;
+        close curs1;
+        close curs2;
+END;
+$$ LANGUAGE plpgsql;
+
+select insertPart();
+
+select ps.ps_partkey, ps.ps_suppkey, ps.ps_availqty, ps.ps_supplycost, ps.ps_comment, part2.producedate+2 as stackdate, ps.prob, ps.id, ps.domain
+into partsupp1
+from part2, partsupp ps
+where part2.p_partkey = ps.ps_partkey;
+
+CREATE TABLE customer2
+(
+  c_custkey integer NOT NULL,
+  c_name character varying(25) NOT NULL,
+  c_address character varying(40) NOT NULL,
+  c_nationkey integer NOT NULL,
+  c_phone character(15) NOT NULL,
+  c_acctbal numeric(15,2) NOT NULL,
+  c_mktsegment character(10) NOT NULL,
+  c_comment character varying(117) NOT NULL,
+  c_registrationdate date,
+  prob real,
+  id integer,
+  domain integer
+)
+
+
+
+select * from customer2;
+
+CREATE OR REPLACE FUNCTION loadCUSTOMER2() RETURNS BOOL AS $$
+DECLARE
+	C_CUSTKEY int;
+	C_NAME varchar(25);
+	C_ADDRESS varchar(40);
+	C_NATIONKEY int;
+	C_PHONE char(15);
+	C_ACCTBAL double precision;
+	C_MKTSEGMENT char(10);
+	C_COMMENT varchar(117);
+	c_registrationdate date;
+	prob double precision;
+        id int;
+        domain int;
+        delta int;
+
+        curs1 cursor for select * from CUSTOMER;
+	curs2 cursor for select count(*) from CUSTOMER;
+	cnt int;
+	ntuples int;
+BEGIN
+	cnt := 0;
+        open curs1;
+	LOOP
+		FETCH curs1 INTO C_CUSTKEY, C_NAME, C_ADDRESS, C_NATIONKEY, C_PHONE, C_ACCTBAL, C_MKTSEGMENT, C_COMMENT, c_registrationdate, prob, id, domain;
+		EXIT WHEN NOT FOUND;
+                delta := round(365*random());
+		insert into CUSTOMER2 values(C_CUSTKEY, C_NAME, C_ADDRESS, C_NATIONKEY, C_PHONE, C_ACCTBAL, C_MKTSEGMENT, C_COMMENT, c_registrationdate - delta, prob, id, domain);
+		cnt := cnt + 1;
+	END LOOP;
+	
+	open curs2;
+	FETCH curs2 INTO ntuples;
+	
+	IF cnt = ntuples THEN
+		RAISE NOTICE 'SUCCESS! Insert % row(s).', (cnt * 2);
+		return TRUE;
+	ELSE
+		RAISE NOTICE 'FAILED!!!';
+		return FALSE;
+	END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+select loadCUSTOMER2();
+
+

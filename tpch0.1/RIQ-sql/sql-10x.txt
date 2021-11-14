@@ -1,0 +1,493 @@
+1. drop table tmp; 
+
+select lineitem.ID as lid, orders.ID as oid, customer2.ID as cid 
+into tmp
+from customer2, orders, lineitem 
+where c_registrationdate + 1 < o_orderdate and
+o_orderdate + 1 < l_shipdate 
+and orders.ID < 116220
+and lineitem.ID < 267000
+and customer2.ID < 101445
+order by l_shipdate, lineitem.ID, o_orderdate, orders.ID, c_registrationdate, customer2.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path1.csv' WITH DELIMITER ',';
+
+1.1
+
+drop table tmp;
+
+select orders.ID as oid, customer2.ID as cid 
+into tmp
+from customer2, orders
+where c_registrationdate + 1 < o_orderdate
+and orders.ID < 116220
+and customer2.ID < 101445
+order by o_orderdate, orders.ID, c_registrationdate, customer2.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path11.csv' WITH DELIMITER ',';
+
+
+1.2
+
+drop table tmp;
+
+select lineitem.ID as lid, orders.ID as oid
+into tmp
+from orders, lineitem 
+where o_orderdate + 1 < l_shipdate 
+and orders.ID < 116220
+and lineitem.ID < 267000
+order by l_shipdate, lineitem.ID, o_orderdate, orders.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path12.csv' WITH DELIMITER ',';
+
+2.
+
+drop table tmp;
+
+select lineitem.ID as lid, orders.ID as oid, customer2.ID as cid
+into tmp
+from customer2, orders, lineitem 
+where c_registrationdate + 1 < o_orderdate and
+o_orderdate + 1 < l_receiptdate
+and orders.ID < 116265
+and lineitem.ID < 267110
+and customer2.ID < 101286
+order by l_receiptdate, lineitem.ID, o_orderdate, orders.ID, c_registrationdate, customer2.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path2.csv' WITH DELIMITER ',';
+
+2.1 
+
+drop table tmp;
+
+select orders.ID as oid, customer2.ID as cid
+into tmp
+from customer2, orders
+where c_registrationdate + 1 < o_orderdate
+and orders.ID < 116265
+and customer2.ID < 101286
+order by o_orderdate, orders.ID, c_registrationdate, customer2.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path21.csv' WITH DELIMITER ',';
+
+
+2.2
+
+drop table tmp;
+
+select lineitem.ID as lid, orders.ID as oid
+into tmp
+from orders, lineitem 
+where o_orderdate + 1 < l_receiptdate
+and orders.ID < 116265
+and lineitem.ID < 267110
+order by l_receiptdate, lineitem.ID, o_orderdate, orders.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path22.csv' WITH DELIMITER ',';
+
+
+3.data
+
+
+select lineitem.ID, partsupp1.ID, part2.ID, orders.ID£¬ customer2.ID
+from customer2, orders, lineitem, part2, partsupp1
+where c_registrationdate + 1 < o_orderdate and
+producedate < c_registrationdate  and
+producedate < stackdate and 
+stackdate < l_receiptdate
+and orders.ID < 117060
+and lineitem.ID < 266833
+and customer2.ID < 101122
+and partsupp1.ID < 21200
+and part2.ID < 1218;
+
+
+3.1 
+
+drop table tmp;
+
+select lineitem.ID as lid, partsupp1.ID as psid, part2.ID as pid 
+into tmp
+from lineitem, part2, partsupp1
+where producedate < stackdate and 
+stackdate < l_receiptdate 
+and lineitem.ID < 266833
+and partsupp1.ID < 21200
+and part2.ID < 1218
+order by l_receiptdate, lineitem.ID,stackdate,partsupp1.ID, producedate,part2.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path31.csv' WITH DELIMITER ',';
+
+
+3.11
+
+drop table tmp;
+
+select partsupp1.ID as psid, part2.ID as pid 
+into tmp
+from part2, partsupp1
+where producedate < stackdate
+and partsupp1.ID < 21200
+and part2.ID < 1218
+order by stackdate,partsupp1.ID, producedate,part2.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path311.csv' WITH DELIMITER ',';
+
+
+3.12
+
+data 134487row 532ms
+
+drop table tmp;
+
+select lineitem.ID as lid, partsupp1.ID as psid
+into tmp
+from lineitem, partsupp1
+where stackdate < l_receiptdate 
+and lineitem.ID < 266833
+and partsupp1.ID < 21200
+order by l_receiptdate, lineitem.ID,stackdate,partsupp1.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path312.csv' WITH DELIMITER ',';
+
+3.2
+
+drop table tmp;
+
+select  orders.ID as oid,customer2.ID as cid,  part2.ID as pid
+into tmp
+from customer2, orders, part2
+where c_registrationdate + 1 < o_orderdate and
+producedate < c_registrationdate 
+and orders.ID < 117060
+and customer2.ID < 101122
+and part2.ID < 1218
+order by o_orderdate,orders.ID,c_registrationdate,customer2.ID, producedate, part2.ID; 
+
+copy tmp to  'E:\\ruc\\data\\10x\\path32.csv' WITH DELIMITER ',';
+
+3.21
+
+drop table tmp;
+
+select  orders.ID as oid,customer2.ID as cid
+into tmp
+from customer2, orders
+where c_registrationdate + 1 < o_orderdate
+and orders.ID < 117060
+and customer2.ID < 101122
+order by o_orderdate,orders.ID,c_registrationdate,customer2.ID; 
+
+copy tmp to  'E:\\ruc\\data\\10x\\path321.csv' WITH DELIMITER ',';
+
+
+3.22
+
+drop table tmp;
+
+select  customer2.ID as cid,  part2.ID as pid
+into tmp
+from customer2, part2
+where producedate < c_registrationdate 
+and customer2.ID < 101122
+and part2.ID < 1218
+order by c_registrationdate,customer2.ID, producedate, part2.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path322.csv' WITH DELIMITER ','
+
+
+4.data
+
+select orders.ID, partsupp1.ID, part2.ID,customer2.ID, lineitem.ID
+from customer2, orders, lineitem, part2, partsupp1
+where c_registrationdate + 1 < l_receiptdate and
+producedate < c_registrationdate  and
+producedate < stackdate and 
+stackdate < o_orderdate 
+and orders.ID < 117062
+and partsupp1.ID < 21180
+and lineitem.ID < 266835
+and customer2.ID < 101145
+and part2.ID < 1207
+
+
+4.1
+
+drop table tmp;
+
+select orders.ID as oid, partsupp1.ID as psid, part2.ID as pid 
+into tmp
+from orders, part2, partsupp1
+where producedate < stackdate and 
+stackdate < o_orderdate 
+and orders.ID < 117062
+and partsupp1.ID < 21180
+and part2.ID < 1207
+order by o_orderdate,orders.ID, stackdate,partsupp1.ID, producedate,part2.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path41.csv' WITH DELIMITER ',';
+
+
+4.11
+
+drop table tmp;
+
+select partsupp1.ID as psid, part2.ID as pid 
+into tmp
+from part2, partsupp1
+where producedate < stackdate 
+and partsupp1.ID < 21180
+and part2.ID < 1207
+order by stackdate, partsupp1.ID,part2.ID,producedate;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path411.csv' WITH DELIMITER ',';
+
+
+4.12
+
+drop table tmp;
+
+select orders.ID as oid, partsupp1.ID as psid
+into tmp
+from orders, partsupp1
+where stackdate < o_orderdate 
+and orders.ID < 117062
+and partsupp1.ID < 21180
+order by o_orderdate,orders.ID, stackdate,partsupp1.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path412.csv' WITH DELIMITER ','
+
+
+4.2 
+
+drop table tmp;
+
+select lineitem.ID as lid,customer2.ID as cid, part2.ID as pid 
+into tmp
+from lineitem,customer2,  part2
+where c_registrationdate + 1 < l_receiptdate and
+producedate < c_registrationdate 
+and lineitem.ID < 266835
+and customer2.ID < 101145
+and part2.ID < 1207
+order by l_receiptdate,lineitem.ID,c_registrationdate,customer2.ID, producedate,part2.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path42.csv' WITH DELIMITER ',';
+
+4.21
+
+drop table tmp;
+
+select lineitem.ID as lid,customer2.ID as cid
+into tmp
+from lineitem,customer2
+where c_registrationdate + 1 < l_receiptdate
+and lineitem.ID < 266835
+and customer2.ID < 101145
+order by l_receiptdate,lineitem.ID,c_registrationdate,customer2.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path421.csv' WITH DELIMITER ',';
+
+
+
+4.22
+
+drop table tmp;
+
+select customer2.ID as cid, part2.ID as pid
+into tmp
+from customer2,  part2
+where producedate < c_registrationdate 
+and customer2.ID < 101145
+and part2.ID < 1207
+order by c_registrationdate,customer2.ID, producedate,part2.ID;
+
+copy tmp to  'E:\\ruc\\10x\\path422.csv' WITH DELIMITER ',';
+
+
+
+5. data
+
+
+select lineitem.ID,  partsupp1.ID, part2.ID,customer2.ID, orders.ID 
+from customer2, orders, lineitem, part2, partsupp1
+where c_registrationdate + 1 < o_orderdate and
+c_registrationdate + 1 < l_receiptdate and
+producedate < stackdate and 
+stackdate < l_receiptdate
+and orders.ID < 116050
+and lineitem.ID < 267040
+and customer2.ID < 101041
+and partsupp1.ID < 21200
+and part2.ID < 1324;
+
+
+
+51.data
+
+drop table tmp;
+
+select orders.ID as oid,customer2.ID as cid
+into tmp
+from customer2, orders
+where c_registrationdate + 1 < o_orderdate
+and orders.ID < 116050
+and customer2.ID < 101041
+order by o_orderdate, orders.ID,c_registrationdate, customer2.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path51.csv' WITH DELIMITER ',';
+
+
+52.data
+
+drop table tmp;
+
+select lineitem.ID as lid, customer2.ID as cid
+into tmp
+from customer2,lineitem
+where c_registrationdate + 1 < l_receiptdate
+and lineitem.ID < 267040
+and customer2.ID < 101041
+order by l_receiptdate, lineitem.ID, c_registrationdate, customer2.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path52.csv' WITH DELIMITER ',';
+
+53.data
+
+drop table tmp;
+
+select lineitem.ID as lid, partsupp1.ID as psid, part2.ID as pid
+into tmp
+from lineitem, part2, partsupp1
+where producedate < stackdate and 
+stackdate < l_receiptdate
+and lineitem.ID < 267040
+and partsupp1.ID < 21200
+and part2.ID < 1324
+order by l_receiptdate, lineitem.ID, stackdate, partsupp1.ID, producedate, part2.ID;
+
+copy tmp to  'E:\\ruc\\10x\\path53.csv' WITH DELIMITER ',';
+
+5.31
+
+drop table tmp;
+
+select partsupp1.ID as psid, part2.ID as pid
+into tmp
+from part2, partsupp1
+where producedate < stackdate
+and partsupp1.ID < 21200
+and part2.ID < 1324
+order by stackdate, partsupp1.ID, producedate, part2.ID;
+
+
+copy tmp to  'E:\\ruc\\data\\10x\\path531.csv' WITH DELIMITER ',';
+
+
+
+5.32
+
+drop table tmp;
+
+select lineitem.ID as lid, partsupp1.ID as psid
+into tmp
+from lineitem, partsupp1
+where stackdate < l_receiptdate
+and lineitem.ID < 267040
+and partsupp1.ID < 21200
+order by l_receiptdate, lineitem.ID, stackdate, partsupp1.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path532.csv' WITH DELIMITER ',';
+
+
+6.data
+
+select orders.ID, customer2.ID, lineitem.ID,  partsupp1.ID, part2.ID
+from customer2, orders, lineitem, part2, partsupp1
+where c_registrationdate + 1 < o_orderdate and
+c_registrationdate + 1 < l_receiptdate and
+producedate < stackdate and 
+stackdate < o_orderdate 
+and orders.ID < 116881
+and lineitem.ID < 266040
+and customer2.ID < 101041
+and partsupp1.ID < 21200
+and part2.ID < 1383;
+
+
+61.data
+
+drop table tmp;
+
+select orders.ID as oid, customer2.ID as cid
+into tmp
+from customer2, orders
+where c_registrationdate + 1 < o_orderdate
+and orders.ID < 116881
+and customer2.ID < 101041
+order by o_orderdate, orders.ID, c_registrationdate, customer2.ID; 
+
+copy tmp to  'E:\\ruc\\data\\10x\\path61.csv' WITH DELIMITER ',';
+
+
+62.data
+
+drop table tmp;
+
+select lineitem.ID as lid,customer2.ID as cid
+into tmp
+from customer2, lineitem
+where c_registrationdate + 1 < l_receiptdate
+and lineitem.ID < 266040
+and customer2.ID < 101041
+order by l_receiptdate, lineitem.ID,c_registrationdate, customer2.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path62.csv' WITH DELIMITER ',';
+
+
+63.data
+
+drop table tmp;
+
+select orders.ID as oid, partsupp1.ID as psid, part2.ID as pid
+into tmp
+from orders, part2, partsupp1
+where producedate < stackdate and 
+stackdate < o_orderdate 
+and orders.ID < 116881
+and partsupp1.ID < 21200
+and part2.ID < 1383
+order by o_orderdate, orders.ID, stackdate, partsupp1.ID, producedate, part2.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path63.csv' WITH DELIMITER ',';
+
+6.31
+
+drop table tmp;
+
+select partsupp1.ID as psid, part2.ID as pid
+into tmp
+from part2, partsupp1
+where producedate < stackdate
+and partsupp1.ID < 21200
+and part2.ID < 1383
+order by stackdate, partsupp1.ID, producedate, part2.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path631.csv' WITH DELIMITER ',';
+
+
+6.32
+
+drop table tmp;
+
+select orders.ID as oid, partsupp1.ID as psid
+into tmp
+from orders,partsupp1
+where stackdate < o_orderdate 
+and orders.ID < 116881
+and partsupp1.ID < 21200
+order by o_orderdate, orders.ID, stackdate, partsupp1.ID;
+
+copy tmp to  'E:\\ruc\\data\\10x\\path632.csv' WITH DELIMITER ',';
+

@@ -1,0 +1,484 @@
+1.data
+
+drop table tmp;
+
+select lineitem.ID as lid, orders.ID as oid, customer2.ID as cid 
+into tmp
+from customer2, orders, lineitem 
+where c_registrationdate + 1 < o_orderdate and
+o_orderdate + 1 < l_shipdate 
+and orders.ID < 116220
+and lineitem.ID < 266220
+and customer2.ID < 101230
+order by l_shipdate, lineitem.ID, o_orderdate, orders.ID, c_registrationdate, customer2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path1.csv' WITH DELIMITER ',';
+
+1.1
+
+
+drop table tmp;
+
+select orders.ID as oid, customer2.ID as cid 
+into tmp
+from customer2, orders
+where c_registrationdate + 1 < o_orderdate
+and orders.ID < 116220
+and customer2.ID < 101230
+order by o_orderdate, orders.ID, c_registrationdate, customer2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path11.csv' WITH DELIMITER ',';
+
+1.2
+
+drop table tmp;
+
+select lineitem.ID as lid, orders.ID as oid
+into tmp
+from orders, lineitem 
+where o_orderdate + 1 < l_shipdate 
+and orders.ID < 116220
+and lineitem.ID < 266220
+order by l_shipdate, lineitem.ID, o_orderdate, orders.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path12.csv' WITH DELIMITER ',';
+
+
+
+2.data 
+
+drop table tmp;
+
+select lineitem.ID as lid, orders.ID as oid, customer2.ID as cid
+into tmp
+from customer2, orders, lineitem 
+where c_registrationdate + 1 < o_orderdate and
+o_orderdate + 1 < l_receiptdate
+and orders.ID < 116210
+and lineitem.ID < 266210
+and customer2.ID < 101220
+order by l_receiptdate, lineitem.ID, o_orderdate, orders.ID, c_registrationdate, customer2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path2.csv' WITH DELIMITER ',';
+
+2.1 
+
+drop table tmp;
+
+select orders.ID as oid, customer2.ID as cid
+into tmp
+from customer2, orders
+where c_registrationdate + 1 < o_orderdate
+and orders.ID < 116210
+and customer2.ID < 101220
+order by o_orderdate, orders.ID, c_registrationdate, customer2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path21.csv' WITH DELIMITER ',';
+
+2.2
+
+drop table tmp;
+
+select lineitem.ID as lid, orders.ID as oid
+into tmp
+from orders, lineitem 
+where o_orderdate + 1 < l_receiptdate
+and orders.ID < 116210
+and lineitem.ID < 266210
+order by l_receiptdate, lineitem.ID, o_orderdate, orders.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path22.csv' WITH DELIMITER ',';
+
+
+3.data
+
+
+select lineitem.ID, partsupp1.ID, part2.ID, orders.ID£¬ customer2.ID
+from customer2, orders, lineitem, part2, partsupp1
+where c_registrationdate + 1 < o_orderdate and
+producedate < c_registrationdate  and
+producedate < stackdate and 
+stackdate < l_receiptdate
+and orders.ID < 117050
+and lineitem.ID < 266840
+and customer2.ID < 101121
+and partsupp1.ID < 21200
+and part2.ID < 1050
+
+
+3.1 
+
+drop table tmp;
+
+select lineitem.ID as lid, partsupp1.ID as psid, part2.ID as pid 
+into tmp
+from lineitem, part2, partsupp1
+where producedate < stackdate and 
+stackdate < l_receiptdate 
+and lineitem.ID < 266840
+and partsupp1.ID < 21200
+and part2.ID < 1050
+order by l_receiptdate, lineitem.ID,stackdate,partsupp1.ID, producedate,part2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path31.csv' WITH DELIMITER ',';
+
+3.11
+
+drop table tmp;
+
+select partsupp1.ID as psid, part2.ID as pid 
+into tmp
+from part2, partsupp1
+where producedate < stackdate
+and partsupp1.ID < 21200
+and part2.ID < 1050
+order by stackdate,partsupp1.ID, producedate,part2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path311.csv' WITH DELIMITER ',';
+
+3.12
+
+drop table tmp;
+
+select lineitem.ID as lid, partsupp1.ID as psid
+into tmp
+from lineitem, partsupp1
+where stackdate < l_receiptdate 
+and lineitem.ID < 266840
+and partsupp1.ID < 21200
+order by l_receiptdate, lineitem.ID,stackdate,partsupp1.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path312.csv' WITH DELIMITER ',';
+
+
+
+3.2
+
+drop table tmp;
+
+select  orders.ID as oid,customer2.ID as cid,  part2.ID as pid
+into tmp
+from customer2, orders, part2
+where c_registrationdate + 1 < o_orderdate and
+producedate < c_registrationdate 
+and orders.ID < 117050
+and customer2.ID < 101121
+and part2.ID < 1050
+order by o_orderdate,orders.ID,c_registrationdate,customer2.ID, producedate, part2.ID; 
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path32.csv' WITH DELIMITER ',';
+
+3.21
+
+drop table tmp;
+
+select  orders.ID as oid,customer2.ID as cid
+into tmp
+from customer2, orders
+where c_registrationdate + 1 < o_orderdate
+and orders.ID < 117050
+and customer2.ID < 101121
+order by o_orderdate,orders.ID,c_registrationdate,customer2.ID; 
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path321.csv' WITH DELIMITER ',';
+
+
+3.22
+
+drop table tmp;
+
+select  customer2.ID as cid,  part2.ID as pid
+into tmp
+from customer2, part2
+where producedate < c_registrationdate 
+and customer2.ID < 101121
+and part2.ID < 1050
+order by c_registrationdate,customer2.ID, producedate, part2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path322.csv' WITH DELIMITER ','
+
+
+
+4.data
+
+select orders.ID, partsupp1.ID, part2.ID,customer2.ID, lineitem.ID
+from customer2, orders, lineitem, part2, partsupp1
+where c_registrationdate + 1 < l_receiptdate and
+producedate < c_registrationdate  and
+producedate < stackdate and 
+stackdate < o_orderdate 
+and orders.ID < 117040
+and partsupp1.ID < 21180
+and lineitem.ID < 266840
+and customer2.ID < 101136
+and part2.ID < 1050
+
+
+4.1
+
+drop table tmp;
+
+select orders.ID as oid, partsupp1.ID as psid, part2.ID as pid 
+into tmp
+from orders, part2, partsupp1
+where producedate < stackdate and 
+stackdate < o_orderdate 
+and orders.ID < 117040
+and partsupp1.ID < 21180
+and part2.ID < 1050
+order by o_orderdate,orders.ID, stackdate,partsupp1.ID, producedate,part2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path41.csv' WITH DELIMITER ',';
+
+4.11
+
+drop table tmp;
+
+select partsupp1.ID as psid, part2.ID as pid 
+into tmp
+from part2, partsupp1
+where producedate < stackdate 
+and partsupp1.ID < 21180
+and part2.ID < 1050
+order by stackdate, partsupp1.ID,part2.ID,producedate;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path411.csv' WITH DELIMITER ',';
+
+4.12
+
+drop table tmp;
+
+select orders.ID as oid, partsupp1.ID as psid
+into tmp
+from orders, partsupp1
+where stackdate < o_orderdate 
+and orders.ID < 117040
+and partsupp1.ID < 21180
+order by o_orderdate,orders.ID, stackdate,partsupp1.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path412.csv' WITH DELIMITER ','
+
+
+4.2 
+
+drop table tmp;
+
+select lineitem.ID as lid,customer2.ID as cid, part2.ID as pid 
+into tmp
+from lineitem,customer2,  part2
+where c_registrationdate + 1 < l_receiptdate and
+producedate < c_registrationdate 
+and lineitem.ID < 266840
+and customer2.ID < 101136
+and part2.ID < 1050
+order by l_receiptdate,lineitem.ID,c_registrationdate,customer2.ID, producedate,part2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path42.csv' WITH DELIMITER ',';
+
+4.21
+
+drop table tmp;
+
+select lineitem.ID as lid,customer2.ID as cid
+into tmp
+from lineitem,customer2
+where c_registrationdate + 1 < l_receiptdate
+and lineitem.ID < 266840
+and customer2.ID < 101136
+order by l_receiptdate,lineitem.ID,c_registrationdate,customer2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path421.csv' WITH DELIMITER ',';
+
+4.22
+
+drop table tmp;
+
+select customer2.ID as cid, part2.ID as pid
+into tmp
+from customer2,  part2
+where producedate < c_registrationdate 
+and customer2.ID < 101136
+and part2.ID < 1050
+order by c_registrationdate,customer2.ID, producedate,part2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path422.csv' WITH DELIMITER ',';
+
+
+
+5. data
+
+
+select lineitem.ID,  partsupp1.ID, part2.ID,customer2.ID, orders.ID 
+from customer2, orders, lineitem, part2, partsupp1
+where c_registrationdate + 1 < o_orderdate and
+c_registrationdate + 1 < l_receiptdate and
+producedate < stackdate and 
+stackdate < l_receiptdate
+and orders.ID < 116050
+and lineitem.ID < 267040
+and customer2.ID < 101041
+and partsupp1.ID < 21200
+and part2.ID < 1060;
+
+
+
+
+51.data
+
+drop table tmp;
+
+select orders.ID as oid,customer2.ID as cid
+into tmp
+from customer2, orders
+where c_registrationdate + 1 < o_orderdate
+and orders.ID < 116050
+and customer2.ID < 101041
+order by o_orderdate, orders.ID,c_registrationdate, customer2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path51.csv' WITH DELIMITER ',';
+
+52.data
+
+drop table tmp;
+
+select lineitem.ID as lid, customer2.ID as cid
+into tmp
+from customer2,lineitem
+where c_registrationdate + 1 < l_receiptdate
+and lineitem.ID < 267040
+and customer2.ID < 101041
+order by l_receiptdate, lineitem.ID, c_registrationdate, customer2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path52.csv' WITH DELIMITER ',';
+
+53.data
+
+drop table tmp;
+
+select lineitem.ID as lid, partsupp1.ID as psid, part2.ID as pid
+into tmp
+from lineitem, part2, partsupp1
+where producedate < stackdate and 
+stackdate < l_receiptdate
+and lineitem.ID < 267040
+and partsupp1.ID < 21200
+and part2.ID < 1060
+order by l_receiptdate, lineitem.ID, stackdate, partsupp1.ID, producedate, part2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path53.csv' WITH DELIMITER ',';
+
+5.31
+
+drop table tmp;
+
+select partsupp1.ID as psid, part2.ID as pid
+into tmp
+from part2, partsupp1
+where producedate < stackdate
+and partsupp1.ID < 21200
+and part2.ID < 1060
+order by stackdate, partsupp1.ID, producedate, part2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path531.csv' WITH DELIMITER ',';
+
+5.32
+
+drop table tmp;
+
+select lineitem.ID as lid, partsupp1.ID as psid
+into tmp
+from lineitem, partsupp1
+where stackdate < l_receiptdate
+and lineitem.ID < 267040
+and partsupp1.ID < 21200
+order by l_receiptdate, lineitem.ID, stackdate, partsupp1.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path532.csv' WITH DELIMITER ',';
+
+
+6.data
+
+select orders.ID, customer2.ID, lineitem.ID,  partsupp1.ID, part2.ID
+from customer2, orders, lineitem, part2, partsupp1
+where c_registrationdate + 1 < o_orderdate and
+c_registrationdate + 1 < l_receiptdate and
+producedate < stackdate and 
+stackdate < o_orderdate 
+and orders.ID < 116850
+and lineitem.ID < 266040
+and customer2.ID < 101041
+and partsupp1.ID < 21200
+and part2.ID < 1065;
+
+
+61.data
+
+drop table tmp;
+
+select orders.ID as oid, customer2.ID as cid
+into tmp
+from customer2, orders
+where c_registrationdate + 1 < o_orderdate
+and orders.ID < 116850
+and customer2.ID < 101041
+order by o_orderdate, orders.ID, c_registrationdate, customer2.ID; 
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path61.csv' WITH DELIMITER ',';
+
+62.data
+
+drop table tmp;
+
+select lineitem.ID as lid,customer2.ID as cid
+into tmp
+from customer2, lineitem
+where c_registrationdate + 1 < l_receiptdate
+and lineitem.ID < 266040
+and customer2.ID < 101041
+order by l_receiptdate, lineitem.ID,c_registrationdate, customer2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path62.csv' WITH DELIMITER ',';
+
+63.data
+
+drop table tmp;
+
+select orders.ID as oid, partsupp1.ID as psid, part2.ID as pid
+into tmp
+from orders, part2, partsupp1
+where producedate < stackdate and 
+stackdate < o_orderdate 
+and orders.ID < 116850
+and partsupp1.ID < 21200
+and part2.ID < 1065
+order by o_orderdate, orders.ID, stackdate, partsupp1.ID, producedate, part2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path63.csv' WITH DELIMITER ',';
+
+6.31
+
+drop table tmp;
+
+select partsupp1.ID as psid, part2.ID as pid
+into tmp
+from part2, partsupp1
+where producedate < stackdate
+and partsupp1.ID < 21200
+and part2.ID < 1065
+order by stackdate, partsupp1.ID, producedate, part2.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path631.csv' WITH DELIMITER ',';
+
+6.32
+
+drop table tmp;
+
+select orders.ID as oid, partsupp1.ID as psid
+into tmp
+from orders,partsupp1
+where stackdate < o_orderdate 
+and orders.ID < 116850
+and partsupp1.ID < 21200
+order by o_orderdate, orders.ID, stackdate, partsupp1.ID;
+
+copy tmp to  'attachment-vldb\\IQ_queries\\data\\1x\\path632.csv' WITH DELIMITER ',';
