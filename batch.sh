@@ -38,16 +38,16 @@ cd ${riq}
 ./riq ${iq_data}/${xx}/path632.csv ${iq_data}/${xx}/path631.csv
 
 # max flow alg
-cd ${falg}
-./falg ${iq_data}/${xx}/path1.csv
-./falg ${iq_data}/${xx}/path2.csv
-./falg ${iq_data}/${xx}/path31.csv
-./falg ${iq_data}/${xx}/path32.csv
-./falg ${iq_data}/${xx}/path41.csv
-./falg ${iq_data}/${xx}/path42.csv
-./falg ${iq_data}/${xx}/path51.csv
-./falg ${iq_data}/${xx}/path52.csv
-./falg ${iq_data}/${xx}/path53.csv
-./falg ${iq_data}/${xx}/path61.csv
-./falg ${iq_data}/${xx}/path62.csv
-./falg ${iq_data}/${xx}/path63.csv
+cd ${rlin}
+./rlin ${iq_data}/${xx}/path1.csv
+./rlin ${iq_data}/${xx}/path2.csv
+./rlin ${iq_data}/${xx}/path31.csv
+./rlin ${iq_data}/${xx}/path32.csv
+./rlin ${iq_data}/${xx}/path41.csv
+./rlin ${iq_data}/${xx}/path42.csv
+./rlin ${iq_data}/${xx}/path51.csv
+./rlin ${iq_data}/${xx}/path52.csv
+./rlin ${iq_data}/${xx}/path53.csv
+./rlin ${iq_data}/${xx}/path61.csv
+./rlin ${iq_data}/${xx}/path62.csv
+./rlin ${iq_data}/${xx}/path63.csv
