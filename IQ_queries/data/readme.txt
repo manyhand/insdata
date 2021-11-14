@@ -1,1 +1,1 @@
-2X, 5X and 10X data volumes are too big to be uploaded as an attachment. Therefore, we only upload 1X data. You can generate all data including 1X, 2X, 5X and 10X from the TPCH data, which is uploaded as an attachment. The TPCH data is in the directory: \attachment-vldb\tpch0.1\RIQ-sql.
+2X, 5X and 10X data volumes are too big to be uploaded as an attachment. Therefore, we only upload 1X data. You can generate all data including 1X, 2X, 5X and 10X from the TPCH data, which is uploaded as an attachment. The TPCH data is in the directory: \icde2022\tpch0.1\RIQ-sql.
